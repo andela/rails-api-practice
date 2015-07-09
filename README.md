@@ -30,7 +30,7 @@ In this tutorial/walkthrough, we will cover the following topics:
     rails-api new api_rails_tutorial
     ```
 
-    You should see a bunch of files being created. However, you will notice that there are no app/views created or app/assets/js created or app/assets/images. You will just be creating an api and so none of these front-end files are created as a result of the rails-api gem.
+You should see a bunch of files being created. However, you will notice that there are no app/views created or app/assets/js created or app/assets/images. You will just be creating an api and so none of these front-end files are created as a result of the rails-api gem.
 
 3. CD into this new project folder.
 
@@ -114,4 +114,5 @@ In this tutorial/walkthrough, we will cover the following topics:
       end  
     end  
 
-6. Let's do the same thing with the Suya Model. Let's
+6. Let's do the same thing with the Suya Model. Let's first generate the model:
+    
