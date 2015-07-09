@@ -31,7 +31,7 @@ By the end of this long multi-part tutorial, you will have a basic understanding
 2. After that, change into the directory where you want your project to live and type:
 
     ```Bash
-    rails-api new api_rails_tutorial
+    rails-api new dat_suya_lyfe
     ```
 
     You should see a bunch of files being created. However, you will notice that there are no app/views created or app/assets/js created or app/assets/images. You will just be creating an api and so none of these front-end files are created as a result of the rails-api gem.
@@ -105,6 +105,7 @@ By the end of this long multi-part tutorial, you will have a basic understanding
     Let's run it with:
 
     ```Bash
+    rake db:create
     rake db:migrate
     ```
 
@@ -136,3 +137,22 @@ By the end of this long multi-part tutorial, you will have a basic understanding
 
 
 7. So we created some models without TDD. Let's try from here on out to abide by TDD standards. We will cover testing in the branch called testing-models-and-bottles.
+
+#### Recap
+-We created a rails api app with the rails-api gem and the rails-api command.
+-We explored models, migrations, and the schema (the representation of the database).
+-We used the generator command for models which was
+
+```Bash
+rails g model ModelName column_name:data_type
+```
+
+By the way, if you left out the data_type in the generator command, it defaults to string so:
+
+```Bash
+rails g model Vendor name email
+```
+
+creates a table called "vendors" with columns called name and email whose data types are strings.
+
+[Model Generators](http://railsguides.net/advanced-rails-model-generators/)
