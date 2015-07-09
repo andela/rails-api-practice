@@ -220,9 +220,124 @@ So, we're going to write some model tests because they are our unit tests that w
 
     Read this:  
     [presence](http://guides.rubyonrails.org/active_record_validations.html#presence)
-    
+
     [saving to database](http://guides.rubyonrails.org/active_record_validations.html#when-does-validation-happen-questionmark)
     > When you create a fresh object, for example using the new method, that object does not belong to the database yet. Once you call save upon that object it will be saved into the appropriate database table.
 
     [valid? or invalid?](http://guides.rubyonrails.org/active_record_validations.html#valid-questionmark-and-invalid-questionmark)
     > valid? triggers your validations and returns true if no errors were found in the object, and false otherwise.
+
+3. Make these tests pass, add them to your test files:  
+
+    ```rubyonrails
+    # this is your vendor_test.rb file
+    require 'test_helper'
+
+    class VendorTest < ActiveSupport::TestCase
+      test "A vendor is valid with a name" do
+        vendor = Vendor.create(name: "Jeff")
+        assert vendor.valid?
+        refute vendor.invalid?
+      end
+
+      test "a vendor is not valid without a name" do
+        vendor = Vendor.create(name: "Jeff")
+        vendor.name = nil
+
+        refute vendor.errors.empty?
+        assert vendor.invalid?
+        refute vendor.valid?
+      end
+
+      test "a vendor is not valid without name, using new method" do
+        vendor = Vendor.new(name: nil)
+
+        assert vendor.invalid?
+        refute vendor.valid?
+      end
+
+      test "a vendor can have a name that is between 2 and 20 characters long" do
+        vendor1 = Vendor.create(name: "a")
+        vendor2 = Vendor.create(name: "four")
+        vendor3 = Vendor.create(name: "ThisNameIsThirtyLength30303030")
+
+        assert vendor1.invalid?
+        assert vendor3.invalid?
+        assert vendor2.valid?
+      end
+
+      test "vendors have to have unique names" do
+        vendor1 = Vendor.create(name: "jeff")
+        vendor2 = Vendor.new(name: "jeff")
+
+        vendor1.valid?
+        vendor2.invalid?
+      end
+
+      test "a vendor can have many suyas" do
+        vendor = Vendor.create(name: "Jeff")
+        beef_suya = Suya.create(meat: "beef", spicy: true)
+        kidney_suya = Suya.create(meat: "kidney", spicy: false)
+
+        vendor.suyas << beef_suya
+        vendor.suyas << kidney_suya
+
+        assert_equal 2, vendor.suyas.count
+      end
+
+      test "a vendor can have many suyas, another way with arrays" do
+        vendor = Vendor.create(name: "Jeff")
+        beef_suya = Suya.create(meat: "beef", spicy: true)
+        kidney_suya = Suya.create(meat: "kidney", spicy: false)
+
+        vendor.suyas = [beef_suya, kidney_suya]
+
+        assert_equal 2, vendor.suyas.count
+      end
+    end
+
+    ```
+
+    and add this to your suya_test.rb file. Make it pass:
+
+    ```rubyonrails
+    require 'test_helper'
+
+    class SuyaTest < ActiveSupport::TestCase
+      test "suya is valid with a meat and spicy" do
+        suya = Suya.new(meat: "beef", spicy: true)
+
+        assert suya.valid?
+
+        suya.save
+
+        assert_equal 1, Suya.count
+      end
+
+      test "suya is not valid without a meat" do
+        suya = Suya.new(meat: nil, spicy: true)
+
+        assert suya.invalid?
+        refute suya.valid?
+      end
+
+      test "suya is not valid without a spiciness level" do
+        suya = Suya.new(meat: "beef", spicy: nil)
+
+        assert suya.invalid?
+      end
+
+      test "suya belongs to a vendor" do
+        vendor = Vendor.create(name: "jeff")
+        suya = Suya.create(meat: "beef", spicy: true)
+
+        suya.vendor = vendor
+
+        refute suya.vendor.blank?
+        assert_equal "jeff", suya.vendor.name
+      end
+    end
+
+    ```
+
+Make them pass. Use pry often. Good luck. Check our my code if you need to. If you see errors, google them.
