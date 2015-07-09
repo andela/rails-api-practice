@@ -67,9 +67,9 @@ That command will generate (the "g") a model called Vendor with a name column in
 This will invoke AR, create a model, a migration, and a test file for the model.
 You should see this in your terminal:
 
-> invoke  active_record
-      create    db/migrate/20150709123903_create_his.rb
-      create    app/models/hi.rb
-      invoke    test_unit
-      create      test/models/hi_test.rb
-      create      test/fixtures/his.yml
+> invoke  active_record  
+      create    db/migrate/20150709123903_create_his.rb  
+      create    app/models/hi.rb  
+      invoke    test_unit  
+      create      test/models/hi_test.rb  
+      create      test/fixtures/his.yml  
