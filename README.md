@@ -1,18 +1,20 @@
-## Building an exposing an api built in Ruby On Rails
+## Building and exposing an api built in Ruby On Rails
 
 #### Introduction and topics
 This tutorial will build an application that exposes data pertaining to vendors and suya.
+It is my first time in Nigeria and some of the instructors took me to eat some awesome Nigerian BBQ and so
+this app will obviously be about Suya.
 
-In this tutorial/walkthrough, we will cover the following topics:
--Setting up a rails api application
--Creating models and their associated tables in a database.
--Validating model columns.
--Creating columns for these tables in the database with different types
--Setting up associations between two tables (has_many and belongs_to associations)
--Unit Testing and Controller Testing. We will test validations and controller endpoints.
--ActiveModel Serializers for manipulating the delivered JSON.
--Rails routes, gemfile
--We will explore how to use the pry gem which is a kind of Ruby debugger.
+In this tutorial/walkthrough, we will cover the following topics:  
+* Setting up a rails api application  
+* Creating models and their associated tables in a database.  
+* Validating model columns.  
+* Creating columns for these tables in the database with different types  
+* Setting up associations between two tables (has_many and belongs_to associations)  
+* Unit Testing and Controller Testing. We will test validations and controller endpoints.  
+* ActiveModel Serializers for manipulating the delivered JSON.  
+* Rails routes, gemfile  
+* We will explore how to use the pry gem which is a kind of Ruby debugger.  
 
 
 #### Let's Begin.
