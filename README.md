@@ -111,12 +111,12 @@ By the end of this long multi-part tutorial, you will have a basic understanding
     Now if you open your db/schema.rb file, you should see a representation of your database. It should read:
 
     > ActiveRecord::Schema.define(version: 20150709093432) do  
-      create_table "vendors", force: :cascade do |t|  
-        t.string   "name"  
-        t.datetime "created_at", null: false  
-        t.datetime "updated_at", null: false  
+        create_table "vendors", force: :cascade do |t|  
+          t.string   "name"  
+          t.datetime "created_at", null: false  
+          t.datetime "updated_at", null: false  
+        end  
       end  
-    end  
 
 6. Let's do the same thing with the Suya Model. Let's first generate the model:
 
