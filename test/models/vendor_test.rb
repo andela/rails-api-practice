@@ -3,7 +3,6 @@ require 'test_helper'
 class VendorTest < ActiveSupport::TestCase
   test "A vendor is valid with a name" do
     vendor = Vendor.create(name: "Jeff")
-
     assert vendor.valid?
     refute vendor.invalid?
   end
@@ -11,8 +10,8 @@ class VendorTest < ActiveSupport::TestCase
   test "a vendor is not valid without a name" do
     vendor = Vendor.create(name: "Jeff")
     vendor.name = nil
-    vendor.save
 
+    refute vendor.errors.empty?
     assert vendor.invalid?
     refute vendor.valid?
   end
