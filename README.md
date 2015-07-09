@@ -7,6 +7,7 @@ this app will obviously be about Suya.
 
 In this tutorial/walkthrough, we will cover the following topics:  
 * Setting up a rails api application  
+* Rails generators
 * Creating models and their associated tables in a database.  
 * Validating model columns.  
 * Creating columns for these tables in the database with different types  
@@ -14,8 +15,11 @@ In this tutorial/walkthrough, we will cover the following topics:
 * Unit Testing and Controller Testing. We will test validations and controller endpoints.  
 * ActiveModel Serializers for manipulating the delivered JSON.  
 * Rails routes, gemfile  
-* We will explore how to use the pry gem which is a kind of Ruby debugger.  
+* We will explore how to use the pry gem which is a kind of Ruby debugger.
+* We will read some documentation and try to figure out how to solve our own bugs.
 
+
+By the end of this long multi-part tutorial, you will have a basic understanding of how to build a simple rails api without views, javasript files, and controllers that can deliver HTML views. This API can then be consumed by a separate client-side Angular application by hitting this api's endpoint and getting back JSON data. Bear with me... it'll be worth it.
 
 #### Let's Begin.
 
@@ -30,7 +34,7 @@ In this tutorial/walkthrough, we will cover the following topics:
     rails-api new api_rails_tutorial
     ```
 
-You should see a bunch of files being created. However, you will notice that there are no app/views created or app/assets/js created or app/assets/images. You will just be creating an api and so none of these front-end files are created as a result of the rails-api gem.
+    You should see a bunch of files being created. However, you will notice that there are no app/views created or app/assets/js created or app/assets/images. You will just be creating an api and so none of these front-end files are created as a result of the rails-api gem.
 
 3. CD into this new project folder.
 
@@ -115,4 +119,20 @@ You should see a bunch of files being created. However, you will notice that the
     end  
 
 6. Let's do the same thing with the Suya Model. Let's first generate the model:
-    
+
+    ```Bash
+    rails g model Suya type:string spicy:boolean
+    ```
+
+    In this model, we are creating a Suya model, and a Suyas table where there is a type column with a string data-type. We're also creating a spicy column with a data-type of boolean.
+
+    Let's try to migrate and see what happens:
+
+    ```Bash
+    rake db:migrate
+    ```
+
+    Unfortunately, that column named "type" will cause us problems later on since "type" is a reserved word in migrations. We will fix that later with another Rails generator.
+
+
+7. So we created some models without TDD. Let's try from here on out to abide by TDD standards. We will cover testing in the branch called testing-models-and-bottles.
