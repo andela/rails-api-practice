@@ -25,10 +25,10 @@ From [Unit Tests from the Rails Guides](http://guides.rubyonrails.org/testing.ht
 > ```
 > A line by line examination of this file will help get you oriented to Rails testing code and terminology.
 >
-> require 'test_helper'
+> require 'test_helper'  
 > As you know by now, test_helper.rb specifies the default configuration to run our tests. This is included with all the tests, > so any methods added to this file are available to all your tests.
 
-> class ArticleTest < ActiveSupport::TestCase
+> class ArticleTest < ActiveSupport::TestCase  
 > The ArticleTest class defines a test case because it inherits from ActiveSupport::TestCase. ArticleTest thus has all the
 > methods available from ActiveSupport::TestCase. You'll see those methods a little later in this guide.
 >
