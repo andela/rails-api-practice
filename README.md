@@ -18,10 +18,11 @@ In this tutorial/walkthrough, we will cover the following topics:
 
 By the end of this long multi-part tutorial, you will have a basic understanding of how to build a simple rails api without views, javasript files, and controllers that can deliver HTML views. This API can then be consumed by a separate client-side Angular application by hitting this api's endpoint and getting back JSON data. Bear with me... it'll be worth it.
 
-#### instructions
+#### Instructions
 If you're starting at the setting-up-rails-api branch, DO NOT CLONE THIS BRANCH. Just follow the instructions below. If you already know the basics of Rails, you can switch to another more advanced branch, clone the branch, and follow the README.
 
 The order of this tutorial:
+
 1. setting-up-rails-api
 2. unit-testing-models-and-bottles.
 
@@ -145,9 +146,9 @@ Simply switch to a branch and follow the README
 7. So we created some models without TDD. Let's try from here on out to abide by TDD standards. We will cover testing in the branch called testing-models-and-bottles.
 
 #### Recap
--We created a rails api app with the rails-api gem and the rails-api command.  
--We explored models, migrations, and the schema (the representation of the database).  
--We used the generator command for models which was
+* We created a rails api app with the rails-api gem and the rails-api command.  
+* We explored models, migrations, and the schema (the representation of the database).  
+* We used the generator command for models which was
 
 ```Bash
 rails g model ModelName column_name:data_type
