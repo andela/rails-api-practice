@@ -97,11 +97,37 @@ So, we're going to write some model tests because they are our unit tests that w
     assert? method (from Minitest):  
     [assert](http://ruby-doc.org/stdlib-2.0.0/libdoc/minitest/rdoc/MiniTest/Assertions.html#method-i-assert)
 
+    After we finish writing the test, run this in terminal:
+
+    ```Bash
+    rake
+    ```
+
+    It passes and you will see this in terminal:
+
+    ```Bash
+    # Running:
+
+    .
+
+    Finished in 0.040551s, 24.6602 runs/s, 49.3205 assertions/s.
+    ```
+
+    The two dots you see (1 of them as after assertions) means that both your assert and refute passed. The tests pass because the vendor is valid and the vendor is not invalid.
+
     So in this test, we have a variable called vendor and we set it to a Vendor object which is created with the create method which both instantiates a new Ruby object with attributes that are determined from the model's table and then saves it to the database using some ActiveRecord ORM magic. Think of the "create" method as a combination of the "new" method and the save method in ActiveRecord. Here's a quote about the "new" method:
 
     > New objects can be instantiated as either empty (pass no construction parameter) or pre-set with attributes but not yet saved (pass a hash with key names matching the associated table column names). In both instances, valid attribute keys are determined by the column names of the associated table — hence you can‘t have attributes that aren‘t part of the table columns
 
     Since there are no validations, we successfully create a vendor (new + saved to database), and vendor is by definition valid (since it saved to the database, it had no errors. An object can only be saved to the database if it's valid/has no errors. So, since it saved successfully to the database as a result of the create method, it is valid.) I'll explain how errors are generated shortly.
+
+    Points to remember and takeaway here:
+    * You can save an object to the database only if it's valid.
+    * An object is valid if it has no errors.
+    * An object has no errors if object.errors.messages is empty.
+    * an object has errors if it fails validations.
+    * You can call Model.new to create a new object whose attribute names are the columns in its related table.
+    * however, after object = Model.new, you cannot call object.save unless object.errors.messages is empty.
 
     Lastly,
     * tests that begin with assert only pass if the argument provided is truthy (anything but false or nil).
@@ -126,7 +152,7 @@ So, we're going to write some model tests because they are our unit tests that w
     rake
     ```
 
-    So this test fails right now. You'll see a failure on the line with the "assert" in it. Currently, vendor is valid even if we set the name to nil. Believe me? You shouldn't. Let's see for yourself.
+    So this test fails right now. You'll see a failure on the line with the "assert" in it. Why? Well currently, vendor is valid even if we set the name to nil. Believe me? You shouldn't. Let's see for yourself.
 
     In your Gemfile (at the parent level of your app, at the bottom), add:
     ```rubyonrails
@@ -158,16 +184,16 @@ So, we're going to write some model tests because they are our unit tests that w
 
     You should stop at that binding.pry in your terminal. Your terminal should look like:
 
-    > From: /Users/Jwan/Dropbox/programming/andela/api_rails_tutorial/test/models/vendor_test.rb @ line 14 VendorTest#test_a_vendor_is_not_valid_without_a_name:
+    > From: /Users/Jwan/Dropbox/programming/andela/api_rails_tutorial/test/models/vendor_test.rb @ line 14   VendorTest#test_a_vendor_is_not_valid_without_a_name:
 
-    > 10: test "a vendor is not valid without a name" do
-      11:   vendor = Vendor.create(name: "Jeff")
-      12:   vendor.name = nil
-      13:   vendor.save
-    > 14:   require 'pry' ; binding.pry
-      15:   assert vendor.invalid?
-      16:   refute vendor.valid?
-      17: end
+    > 10: test "a vendor is not valid without a name" do  
+      11:   vendor = Vendor.create(name: "Jeff")  
+      12:   vendor.name = nil  
+      13:   vendor.save  
+    > 14:   require 'pry' ; binding.pry  
+      15:   assert vendor.invalid?  
+      16:   refute vendor.valid?  
+      17: end  
 
     > [1] pry(#<VendorTest>)>
 
@@ -185,9 +211,10 @@ So, we're going to write some model tests because they are our unit tests that w
 
     Type in:
 
-    > vendor.errors.empty?
+    > vendor.errors.messages.empty?
 
-    What does empty? do? Look it up.
+    What does empty? do? Look it up.  
+    This returns true so vendor is valid.
 
     Type in:
 
@@ -215,7 +242,7 @@ So, we're going to write some model tests because they are our unit tests that w
     Inside the Vendor class, type in:
 
     ```rubyonrails
-    validates :name, presence: true,
+    validates :name, presence: true
     ```
 
     Read this:  
@@ -227,7 +254,22 @@ So, we're going to write some model tests because they are our unit tests that w
     [valid? or invalid?](http://guides.rubyonrails.org/active_record_validations.html#valid-questionmark-and-invalid-questionmark)
     > valid? triggers your validations and returns true if no errors were found in the object, and false otherwise.
 
-3. Make these tests pass, add them to your test files:  
+    Remove the require 'pry';binding.pry line and run your tests again.
+
+    In terminal now, type:
+    ```Bash
+    rake
+    ```
+
+    Now your tests should pass because:
+
+    ```rubyonrails
+    assert vendor.invalid?
+    ```
+
+    in the second test now passes.
+
+5. Make these tests pass, add them to your test files:  
 
     ```rubyonrails
     # this is your vendor_test.rb file
