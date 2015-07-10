@@ -116,4 +116,25 @@ If you're starting from here, clone this repo down.
     end
     ```
 
-    
+    and create teh new controller nested under a v2 folder.
+
+5. Now let's render a response in JSON. There are many ways to communicated with the API. The most popular choices are XML and
+    JSON. For our sample application we will just use JSON, or JavaScript Object Notation, which is similar to Javascript objects and is widely supported by other programming languages, including Ruby. JSON’s main advantage over XML is simpler syntax, which makes it easier to read by human and it's faster(parsing is faster and it's smaller so it's faster in transmission over the Internet). Thanks to built-in support for JSON, creating response in this format in Ruby on Rails is very easy:
+
+    Open your app/controllers/api/v1/vendors_controller.rb and type in:
+    ```rubyonrails
+    def index
+      render json: Vendor.all
+    end
+    ```
+
+    And you're done, your endpoint now delivers JSON.
+
+    In terminal, type:
+
+    ```Bash
+    rails s
+    ```
+
+    If your port is 3000, then visit localhost:3000/app/v1/vendors and you should receive back JSON data.  
+    You can also visit localhost:3000/app/v1/vendors.json
