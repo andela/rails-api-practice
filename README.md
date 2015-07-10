@@ -6,7 +6,7 @@ If you've never used pry or a debugger before... this is going to be a treat.
 
 If you just starting here to learn about model testing, git clone this branch and use that as your starting code base.
 
-If you're stuck, feel free to email [Jeffrey Wan](Jwan622@gmail.com), ask StackOverFlow or skip to the next branch and take a look at that code base. The next branch's code should be this branch at its completed state.
+If you're stuck, ask StackOverFlow or skip to the next branch and take a look at that code base. The next branch's code should be this branch at its completed state.
 
 ## Let's Learn how to write Unit Tests
 
@@ -420,7 +420,7 @@ So, we're going to write some model tests because they are our unit tests that w
     ```rubyonrails
     validates :spicy, :inclusion... (something goes here that I'm not going to tell you)
     ```
-    
+
 
 6.  Now add this to your suya_test.rb file.
 
