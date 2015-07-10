@@ -1,4 +1,4 @@
-## Let's create an api of suya and vendors.
+## Let's create an API of suya and vendors.
 
 We're going to create api endpoints in this rails app that delivers JSON data.
 
