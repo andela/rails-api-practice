@@ -98,7 +98,7 @@ So, we're going to write some model tests because they are our unit tests that w
 
     valid? method:  
     [valid](http://api.rubyonrails.org/classes/ActiveRecord/Validations.html)
-    The important thing is that an ActiveRecord object is valid if it has no errors. If there are no errors in the object, object.valid? returns true. object.errors should be empty. We will see what this means shortly and we will see what validations are shortly.
+    The important thing is that an ActiveRecord object is valid if it has no errors. If there are no errors in the object, object.valid? returns true and object.errors.messages should be empty. If an object is valid, only then can it be saved to the database via object.save.
 
     assert? method (from Minitest):  
     [assert](http://ruby-doc.org/stdlib-2.0.0/libdoc/minitest/rdoc/MiniTest/Assertions.html#method-i-assert)
@@ -125,9 +125,9 @@ So, we're going to write some model tests because they are our unit tests that w
 
     > New objects can be instantiated as either empty (pass no construction parameter) or pre-set with attributes but not yet saved (pass a hash with key names matching the associated table column names). In both instances, valid attribute keys are determined by the column names of the associated table — hence you can‘t have attributes that aren‘t part of the table columns
 
-    Since there are no validations, we successfully create a vendor (new + saved to database), and vendor is by definition valid (since it saved to the database, it had no errors. An object can only be saved to the database if it's valid/has no errors. So, since it saved successfully to the database as a result of the create method, it is valid.) I'll explain how errors are generated shortly.
+    Since there are no validations, we successfully create a vendor (new + saved to database), and vendor is by definition valid (since it saved to the database, it had no errors. An object can only be saved to the database if it's valid/has no errors. So, since it saved successfully to the database as a result of the create method, it is valid.)
 
-    Points to remember and takeaway here:
+    Points to remember and takeaways:
     * You can save an object to the database only if it's valid.
     * An object is valid if it has no errors.
     * An object has no errors if object.errors.messages is empty.
@@ -158,7 +158,7 @@ So, we're going to write some model tests because they are our unit tests that w
     rake
     ```
 
-    So this test fails right now. You'll see a failure on the line with the "assert" in it. Why? Well currently, vendor is valid even if we set the name to nil. Believe me? You shouldn't. Let's see for yourself.
+    So this test fails right now. You'll see a failure on the line with the "assert" in it. Why? Well currently, vendor is valid even if we set the name to nil. Believe me? You shouldn't. Let's see for yourself using pry.
 
     In your Gemfile (at the parent level of your app, at the bottom), add:
     ```rubyonrails
@@ -242,7 +242,7 @@ So, we're going to write some model tests because they are our unit tests that w
     ```Bash
     exit
     ```
-
+    So how do we get test 2 to pass. We need to add some validations which are like restrictions on the model that have to be passed before an object can be saved to the databaes.  
     Open up your app/models/vendor.rb file and let's add some validations.
 
     Inside the Vendor class, type in:
