@@ -4,6 +4,16 @@ If you've never used pry or a debugger before... this is going to be a treat.
 
 #### Instructions
 
+The order of this tutorial:
+
+1. setting-up-rails-api
+2. unit-testing-models-and-bottles.
+
+If you are unfamiliar with Rails, start at the beginning. If you are somewhat familiar with Rails, switch to the branch creating-an-api on Github  
+and start there  
+
+Simply switch to a branch and follow the README.
+
 If you just starting here to learn about model testing, git clone this branch and use that as your starting code base.
 
 If you're stuck, ask StackOverFlow or skip to the next branch and take a look at that code base. The next branch's code should be this branch at its completed state.
