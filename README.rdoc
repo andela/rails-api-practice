@@ -26,6 +26,9 @@ The order of this tutorial:
 1. setting-up-rails-api
 2. unit-testing-models-and-bottles.
 
+If you are unfamiliar with Rails, start at the beginning. If you are somewhat familiar with Rails, switch to the branch creating-an-api on Github
+and start there
+
 Simply switch to a branch and follow the README
 
 #### Let's Begin.
