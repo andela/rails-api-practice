@@ -291,6 +291,7 @@ So, we're going to write some model tests because they are our unit tests that w
       test "a vendor is not valid without a name" do
         vendor = Vendor.create(name: "Jeff")
         vendor.name = nil
+        vendor.save
 
         refute vendor.errors.empty?
         assert vendor.invalid?
@@ -378,7 +379,7 @@ So, we're going to write some model tests because they are our unit tests that w
     Now open up your schema. You now have a column in your suyas table that is called vendor_id. This allows you to specify a vendor for every suya which models the "belongs to" relationship for suyas while still allowing vendors to have many suyas. Imagine 10 rows in the suyas table which implies 10 different suyas. Each one of those rows has the number 1 in teh vendor_id column. This would imply that vendor number 1 has 10 suyas and each suya belongs to vendor number 1. Got it?
 
     Look up what indexing is on a rails column.
-    (indexing)[https://tomafro.net/2009/08/using-indexes-in-rails-index-your-associations]
+    [indexing][https://tomafro.net/2009/08/using-indexes-in-rails-index-your-associations]
     We add an index to this vendor_id column because we'll constantly be looking up suyas using this column and this increases the speed of the lookup.
 
     Open up your app/models/vendor.rb file and add this line:
@@ -412,6 +413,14 @@ So, we're going to write some model tests because they are our unit tests that w
     ```
 
     to look up the vendor associated with a suya.
+
+
+    Lastly, if the test "a vendor can have many suyas" is still failing because kidney_suya isn't saving, look into the problem. Basically, false values are considered blank and so you may need to validate the spicy field with this code:
+
+    ```rubyonrails
+    validates :spicy, :inclusion... (something goes here that I'm not going to tell you)
+    ```
+    
 
 6.  Now add this to your suya_test.rb file.
 
