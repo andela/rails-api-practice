@@ -1,6 +1,12 @@
-#### Unit Testing with Minitest, Debugging, Using the Pry gem, ActiveRecord Validations
+## Unit Testing with Minitest, Debugging, Using the Pry gem, ActiveRecord Validations
 
 If you've never used pry or a debugger before... this is going to be a treat.
+
+#### Instructions
+
+If you just starting here to learn about model testing, git clone this branch and use that as your starting code base.
+
+If you're stuck, feel free to email [Jeffrey Wan](Jwan622@gmail.com), ask StackOverFlow or skip to the next branch and take a look at that code base. The next branch's code should be this branch at its completed state.
 
 ## Let's Learn how to write Unit Tests
 
@@ -269,7 +275,7 @@ So, we're going to write some model tests because they are our unit tests that w
 
     in the second test now passes.
 
-5. Make these tests pass, add them to your test files:  
+5. Make these tests pass, add them to your test/models/vendor_test.rb file:  
 
     ```rubyonrails
     # this is your vendor_test.rb file
@@ -340,7 +346,75 @@ So, we're going to write some model tests because they are our unit tests that w
 
     ```
 
-    and add this to your suya_test.rb file. Make it pass:
+    So, the test "a vendor can have many suyas is a bit tricky".
+
+    The relationship that we want to model is that a vendor has many suyas, but a suya belongs to a vendor. We are going to make the assumption that a suya cannot have many vendors... it belongs to only one vendor!
+
+    How do we do this?
+
+    I like doing it this way:
+
+    In terminal, type:
+
+    ```Bash
+    rails g migration AddVendorsIdColumnToSuyas
+    ```
+
+    In the migration, type:
+
+    ```rubyonrails
+    def change  
+      add_column :suyas, :vendor_id, :integer  
+      add_index :suyas, :vendor_id  
+    end  
+    ```
+
+    Run:
+
+    ```Bash
+    rake db:migrate
+    ```
+
+    Now open up your schema. You now have a column in your suyas table that is called vendor_id. This allows you to specify a vendor for every suya which models the "belongs to" relationship for suyas while still allowing vendors to have many suyas. Imagine 10 rows in the suyas table which implies 10 different suyas. Each one of those rows has the number 1 in teh vendor_id column. This would imply that vendor number 1 has 10 suyas and each suya belongs to vendor number 1. Got it?
+
+    Look up what indexing is on a rails column.
+    (indexing)[https://tomafro.net/2009/08/using-indexes-in-rails-index-your-associations]
+    We add an index to this vendor_id column because we'll constantly be looking up suyas using this column and this increases the speed of the lookup.
+
+    Open up your app/models/vendor.rb file and add this line:
+
+    ```rubyonrails
+    class Vendor < ActiveRecord::Base  
+      has_many :suyas  
+
+      validates :name, presence: true  
+    end  
+    ```
+
+    Now open up your suys.rb file and add this:
+
+    ```rubyonrails
+    class Suya < ActiveRecord::Base  
+      belongs_to :vendor  
+    end  
+    ```
+
+    That's how we model this relationship in rails. This gives us the ability to call methods like
+
+    ```rubyonrails
+    vendor.suyas
+    ```
+
+    to look up all the suyas for a specific vendor. and this code:
+
+    ```rubyonrails
+    suya.vendor
+    ```
+
+    to look up the vendor associated with a suya.
+
+6.  Now add this to your suya_test.rb file.
+
 
     ```rubyonrails
     require 'test_helper'
@@ -382,4 +456,46 @@ So, we're going to write some model tests because they are our unit tests that w
 
     ```
 
-Make them pass. Use pry often. Good luck. Check our my code if you need to. If you see errors, google them.
+    So I changed the "type" column in the suyas table to "meat". "type" is a keyword in Rails and so you are unable to make a table whose column name is "type". Lets change our tables with a new migration file (again, a file that tells Rails how to incrementally change its database structure.)
+
+    In terminal, type:
+
+    ```Bash
+    rails g migration ChangeTypeInSuyas
+    ```
+
+    Open up the migration file and make it look like this:
+    ```rubyonrails
+    class ChangeColumnTypeInSuyas < ActiveRecord::Migration
+      def change
+        rename_column :suyas, :type, :meat
+      end
+    end
+    ```
+
+    Then migrate again in terminal:
+
+    ```Bash
+    rake db:migrate
+    ```
+
+
+    Now try making the following tests pass:
+
+    ```Bash
+    rake
+    ```
+
+    You'll now see that Rails is trying to insert data into the suyas table but it's trying to insert data with with a "type" still. Where is that coming from and why is that happening?
+
+    The answer is that when you ran:
+
+    ```Bash
+    rails g model Model
+    ```
+
+    it created fixture files which are test objects that are created when the tests are run with the rake command. They are old and outdated and were not updated when we ran the migration that changed the suyas table. So, let's delete them.
+
+    Delete the files in test/fixtures. They are called suyas.yml and vendors.yml.
+
+    Now you can start making your suyas tests pass. Make them pass. Use pry often. Good luck. Check our my code if you need to. If you see errors, google them.
