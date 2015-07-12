@@ -1,192 +1,77 @@
-## Let's create an API of suya and vendors.
-
-We're going to create api endpoints in this rails app that delivers JSON data.
-
-New JavaScript frameworks emerge constantly, completely changing the way we think about building web applications. With libraries such as AngularJS, Ember.js or Backbone.js, the Rails server is no longer responsible for generating complete pages. Rails is often reduced to serving as a backend for client-side application.
+## Testing APIs
 
 #### Instructions
 
-If you're starting from here, clone this repo down.
+If you are starting at this point in the tutorial, clone down the repo and follow the instructions in the **Let's Begin** section
 
-Remember, the order of branches I recommend doing this tutorial is:  
+Again, the order of this tutorial is:
 
-1. setting-up-rails-api  
-2. unit-testing-models-and-bottles  
-3. creating-api  
+1. setting-up-rails-api
+2. unit-testing-models-and-bottles
+3. creating-api
+4. testing-api
 
-**But if you start at this branch to learn how to create an api, first clone this branch.**
 
-#### Let's begin.
+#### Let's Begin
 
-1. Let's make a seed file. Open up your seeds.rb file and put this in there:  
-    ```rubyonrails
-    vendor  = Vendor.create(name: "Jeffe")  
-    vendor1 = Vendor.create(name: "Jeffe1")  
-    vendor2 = Vendor.create(name: "Jeffe2")  
+In your test/controllers/api/v1 folder, open up the vendors_controller_test.rb.  
+We're first going to test our index endpoint that returns back all of the vendors.
 
-    5.times do |n|  
-      Vendor.create(name: "Jeffe#{n+3}")  
+```rubyonrails
+test "the index action returns back json of all vendors" do
+  jeff = Vendor.create(name: "Jeff")
+  obie = Vendor.create(name: "Obie")
+  jeremy = Vendor.create(name: "Jeremy")
+
+  get :index
+  vendors = JSON.parse(response.body)
+
+  assert_equal 3, vendors.count
+  assert_equal "Jeff", vendors[0]
+  assert_equal "Obie", vendors[1]
+  assert_equal "Jeremy", vendors[2]
+end
+```
+
+FYI, I like separating my tests into 3 sections:
+
+1. the setup (this is where I create test fixtures)
+2. the actions of the test
+3. the tests themselves
+
+I separate each section of the test which makes my tests more readable.
+
+A few points I want to first go over about this test:
+
+1. the "get" action is explained well in the edgeguides:
+
+    > Rails simulates a request on the action called index, making sure the request was successful and also ensuring that the right response body has been generated.
+
+    > The get method kicks off the web request and populates the results into the response. It accepts 4 arguments:
+
+    > The action of the controller you are requesting. This can be in the form of a string or a symbol.
+
+    > params: option with a hash of request parameters to pass into the action (e.g. query string parameters or article variables).
+
+    > session: option with a hash of session variables to pass along with the request.
+
+    > flash: option with a hash of flash values.
+
+    > All the keyword arguments are optional.
+
+    [controller tests](http://edgeguides.rubyonrails.org/testing.html#functional-tests-for-your-controllers)  
+
+    The get method simulates an HTTP request.
+
+
+2. The controller that we're testing is automatically inferred. When we created the controller, a controller test was created   for us and it inherits from ActionController::TestCase.
+
+    > ActionController::TestCase will automatically infer the controller under test from the test class name. If the controller cannot be inferred from the test class name, you can explicitly set it with tests.
+
+    > class SpecialEdgeCaseWidgetsControllerTest < ActionController::TestCase
+      tests WidgetController
     end
 
-    vendor.suyas << Suya.create(meat: "beef", spicy: true)  
-    vendor.suyas << Suya.create(meat: "ram", spicy: true)  
-    vendor1.suyas << Suya.create(meat: "chicken", spicy: true)  
-    vendor1.suyas << Suya.create(meat: "kidney", spicy: false)  
-    vendor2.suyas << Suya.create(meat: "liver", spicy: false)  
-    ```
+    [more on controller tests](http://api.rubyonrails.org/classes/ActionController/TestCase.html)
 
-    Currently we have no data in our database. This seed file will allow you to populate your database with fake data. This is so we have some data to consume in our API. Keep in mind that you need to use the shovel operator when trying to populate the has_many relationship. You cannot use the "=" sign. Otherwise, you'll see this error:
-
-    ```Bash
-     undefined method `each' for #<Suya:0x007f81aea29310>
-    ```
-
-  In terminal, type:
-
-  ```Bash
-  rake db:seed
-  ```  
-
-  to seed your database.
-
-2. In terminal, type:
-
-    ```Bash
-    rails console
-    ```
-
-    Hit enter. Then play around with these commands:
-
-    ```Bash
-    Vendor.all
-    ```
-
-    ```Bash
-    Vendor.first
-    ```
-
-    ```Bash
-    Vendor.first.name
-    ```
-
-    ```Bash
-    Vendor.first.suyas
-    ```
-
-    ```Bash
-    Vendor.first.suyas[0]
-    ```
-
-    ```Bash
-    suya = Vendor.first.suyas[0]
-    suya.meat
-    ```
-
-3. Before we build our api, let's first talk about versioning.
-
-    To be of any value, the API interface (the methods used to receive the JSON data) and the url must remain stable and consistent. If you introduce any changes to the routing, the interface, or parameters passed to the API or response format, all of your clients using the API might break. So that's why we'll be versioning our api with routes like api/v1/vendors instead of just /vendors. In the latter case, only 1 version of the api will exist and so any changes to the api will immediately effect client side applications that consume the api JSON data. Thanks to versioning, you can release new, improved APIs, without cutting off clients using the old one. Let's start with the config/routes.rb file:
-
-    ```rubyonrails
-      Rails.application.routes.draw do  
-        namespace :api do  
-          namespace :v1 do  
-            resources :vendors  
-          end  
-        end  
-      end
-    ```
-
-    This namespacing will ensure that our urls will look like /api/v1/vendors. A request to that URL will hook into controllers with thes same namespacing.
-
-4.  Next, we need to create api/v1 directory under app/controllers and put our vendors controllers there:
-
-    ```Bash
-    rails g controller api/v1/vendors index
-    ```
-
-    This will generate a controller with an index action.
-
-    At some point in the future if you want to create a new api, just change your routes file to this:
-
-    ```rubyonrails
-    MyApp::Application.routes.draw do
-      namespace :api do
-        namespace :v1 do
-          resources :user
-          ...
-        end
-
-        namespace :v2 do
-          resources :user
-          ...
-        end
-      end
-    end
-    ```
-
-    and create teh new controller nested under a v2 folder.
-
-5. Now let's render a response in JSON. There are many ways to communicated with the API. The most popular choices are XML and
-    JSON. For our sample application we will just use JSON, or JavaScript Object Notation, which is similar to Javascript objects and is widely supported by other programming languages, including Ruby. JSON’s main advantage over XML is simpler syntax, which makes it easier to read by human and it's faster(parsing is faster and it's smaller so it's faster in transmission over the Internet). Thanks to built-in support for JSON, creating response in this format in Ruby on Rails is very easy:
-
-    Open your app/controllers/api/v1/vendors_controller.rb and type in:
-    ```rubyonrails
-    def index
-      render json: Vendor.all
-    end
-    ```
-
-    And you're done, your endpoint now delivers JSON.
-
-    In terminal, type:
-
-    ```Bash
-    rails s
-    ```
-
-    If your port is 3000, then visit localhost:3000/app/v1/vendors and you should receive back JSON data.  
-    You can also visit localhost:3000/app/v1/vendors.json
-
-6. One thing that is interesting is that even though you can visit the url, and see the JSON data if you make an HTTP request,   you will encounter the problem if you make an AJAX request using a client-side framework.
-
-    First, understand CORS:  
-    [CORS from MDN] (https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)  
-    Here's a quote from that MDN explanation:
-    > Cross-site HTTP requests initiated from within scripts have been subject to well-known restrictions, for well-understood security reasons.  For example HTTP Requests made using the XMLHttpRequest object were subject to the same-origin policy.  In particular, this meant that a web application using XMLHttpRequest could only make HTTP requests to the domain it was loaded from, and not to other domains.
-
-    From Stackoverflow:  
-    [CORS explanation on StackOverflow]   (http://stackoverflow.com/questions/10636611/how-does-access-control-allow-origin-header-work)  
-
-    I think this is a good explanation about why, CORS, and AJAX.  
-
-    > CORS is AJAX. What makes CORS special is that the AJAX request is being posted to a domain different than that of the client. Historically, this type of request has been deemed a security threat and has been denied by the browser. With the prevalence of AJAX and the transformation of thick-client applications, however, modern browsers have been evolved to embrace the idea that critical information doesn't necessarily come from the host domain.
-
-    > Now, modern browsers (Internet Explorer 8+, Firefox 3.5+, Safari 4+, and Chrome) can make AJAX requests to other domains so long as the target server allows it. This security handshake takes place in the form of HTTP headers. When the client (browser) makes cross-origin requests, it includes the HTTP header - Origin - which announces the requesting domain to the target server. If the server wants to allow the cross-origin request, it has to echo back the Origin in the HTTP response header - Access-Control-Allow-Origin.
-
-    Note: The server can also send back * as the Access-Control-Allow-Origin value if it wants to be more flexible and allow any client domain access.
-
-    So how do we fix this? How do we allow CORS from our Rails server?
-
-    So we need to add some code to our ApplicationController to support CORS.
-
-    In our application_controller.rb file, type:
-
-    ```rubyonrails
-    before_filter :add_allow_credentials_headers
-
-    def add_allow_credentials_headers
-      response.headers['Access-Control-Allow-Origin'] = request.headers['Origin'] || '*'
-      response.headers['Access-Control-Allow-Credentials'] = 'true'
-    end
-    ```
-
-    Now when a server makes a request to the API endpoint, the before_filter will fire before any controller action is fired.
-    Read about the before_filter (which I believe is now the same thing as before_action) here:  
-    [before_filter](http://guides.rubyonrails.org/action_controller_overview.html#filters)
-
-    **Access-Control-Allow-Origin** is required. This header must be included in all valid CORS responses; omitting the header will cause the CORS request to fail. The value of the header can either echo the Origin request header (as in the example above), or be a '*' to allow requests from any origin. If you’d like any site to be able to access your data, using '*' is fine. But if you’d like finer control over who can access your data, use an actual value in the header.
-
-    [CORS and Rails](http://leopard.in.ua/2012/07/08/using-cors-with-rails/)
-
-
-7. And you're good. You have an exposed suya API.
+3. The response object represents the response of the last HTTP response. In the above example, @response becomes valid after calling "get". If the various assert methods are not sufficient, then you may use this object to inspect the HTTP response in detail.
