@@ -27,7 +27,7 @@ If you're starting from here, clone this repo down.
     vendor2.suyas << Suya.create(meat: "liver", spicy: false)  
     ```
 
-    Keep in mind that you need to use the shovel operator when trying to populate the has_many relationship otherwise you'll see this error:
+    Currently we have no data in our database. This seed file will allow you to populate your database with fake data. This is so we have some data to consume in our API. Keep in mind that you need to use the shovel operator when trying to populate the has_many relationship. You cannot use the "=" sign. Otherwise, you'll see this error:
 
     ```Bash
      undefined method `each' for #<Suya:0x007f81aea29310>
@@ -142,13 +142,15 @@ If you're starting from here, clone this repo down.
 6. One thing that is interesting is that even though you can visit the url, and see the JSON data if you make an HTTP request
     , you will encounter the problem if you make an AJAX request using a client-side framework.
 
-    First, understand CORS:
-    [CORS from MDN] (https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)
+    First, understand CORS:  
+    [CORS from MDN] (https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)  
+    Here's a quote from that MDN explanation:
+    > Cross-site HTTP requests initiated from within scripts have been subject to well-known restrictions, for well-understood security reasons.  For example HTTP Requests made using the XMLHttpRequest object were subject to the same-origin policy.  In particular, this meant that a web application using XMLHttpRequest could only make HTTP requests to the domain it was loaded from, and not to other domains.
 
-    From Stackoverflow:
-    [CORS explanation on StackOverflow] (http://stackoverflow.com/questions/10636611/how-does-access-control-allow-origin-header-work)
+    From Stackoverflow:  
+    [CORS explanation on StackOverflow]   (http://stackoverflow.com/questions/10636611/how-does-access-control-allow-origin-header-work)  
 
-    I think this is a good explanation about why, CORS, and AJAX.
+    I think this is a good explanation about why, CORS, and AJAX.  
     > CORS is AJAX. What makes CORS special is that the AJAX request is being posted to a domain different than that of the client. Historically, this type of request has been deemed a security threat and has been denied by the browser. With the prevalence of AJAX and the transformation of thick-client applications, however, modern browsers have been evolved to embrace the idea that critical information doesn't necessarily come from the host domain.
 
     > Now, modern browsers (Internet Explorer 8+, Firefox 3.5+, Safari 4+, and Chrome) can make AJAX requests to other domains so long as the target server allows it. This security handshake takes place in the form of HTTP headers. When the client (browser) makes cross-origin requests, it includes the HTTP header - Origin - which announces the requesting domain to the target server. If the server wants to allow the cross-origin request, it has to echo back the Origin in the HTTP response heder - Access-Control-Allow-Origin.
