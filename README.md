@@ -138,3 +138,21 @@ If you're starting from here, clone this repo down.
 
     If your port is 3000, then visit localhost:3000/app/v1/vendors and you should receive back JSON data.  
     You can also visit localhost:3000/app/v1/vendors.json
+
+6. One thing that is interesting is that even though you can visit the url, and see the JSON data if you make an HTTP request
+    , you will encounter the problem if you make an AJAX request using a client-side framework.
+
+    First, understand CORS:
+    [CORS from MDN] (https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)
+
+    From Stackoverflow:
+    [CORS explanation on StackOverflow] (http://stackoverflow.com/questions/10636611/how-does-access-control-allow-origin-header-work)
+
+    I think this is a good explanation about why, CORS, and AJAX.
+    > CORS is AJAX. What makes CORS special is that the AJAX request is being posted to a domain different than that of the client. Historically, this type of request has been deemed a security threat and has been denied by the browser. With the prevalence of AJAX and the transformation of thick-client applications, however, modern browsers have been evolved to embrace the idea that critical information doesn't necessarily come from the host domain.
+
+    > Now, modern browsers (Internet Explorer 8+, Firefox 3.5+, Safari 4+, and Chrome) can make AJAX requests to other domains so long as the target server allows it. This security handshake takes place in the form of HTTP headers. When the client (browser) makes cross-origin requests, it includes the HTTP header - Origin - which announces the requesting domain to the target server. If the server wants to allow the cross-origin request, it has to echo back the Origin in the HTTP response heder - Access-Control-Allow-Origin.
+
+    > NOTE: The server can also echo back "*" as the Access-Control-Allow-Origin value if it wants to be more open-ended with its security policy.
+
+    So how do we fix this? How do we allow CORS from our Rails server?
