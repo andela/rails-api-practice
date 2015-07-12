@@ -8,6 +8,14 @@ New JavaScript frameworks emerge constantly, completely changing the way we thin
 
 If you're starting from here, clone this repo down.
 
+Remember, the order of branches I recommend doing this tutorial is:  
+
+1. setting-up-rails-api  
+2. unit-testing-models-and-bottles  
+3. creating-api  
+
+**But if you start at this branch to learn how to create an api, first clone this branch.**
+
 #### Let's begin.
 
 1. Let's make a seed file. Open up your seeds.rb file and put this in there:  
@@ -139,8 +147,7 @@ If you're starting from here, clone this repo down.
     If your port is 3000, then visit localhost:3000/app/v1/vendors and you should receive back JSON data.  
     You can also visit localhost:3000/app/v1/vendors.json
 
-6. One thing that is interesting is that even though you can visit the url, and see the JSON data if you make an HTTP request
-    , you will encounter the problem if you make an AJAX request using a client-side framework.
+6. One thing that is interesting is that even though you can visit the url, and see the JSON data if you make an HTTP request,   you will encounter the problem if you make an AJAX request using a client-side framework.
 
     First, understand CORS:  
     [CORS from MDN] (https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)  
@@ -151,10 +158,35 @@ If you're starting from here, clone this repo down.
     [CORS explanation on StackOverflow]   (http://stackoverflow.com/questions/10636611/how-does-access-control-allow-origin-header-work)  
 
     I think this is a good explanation about why, CORS, and AJAX.  
+
     > CORS is AJAX. What makes CORS special is that the AJAX request is being posted to a domain different than that of the client. Historically, this type of request has been deemed a security threat and has been denied by the browser. With the prevalence of AJAX and the transformation of thick-client applications, however, modern browsers have been evolved to embrace the idea that critical information doesn't necessarily come from the host domain.
 
-    > Now, modern browsers (Internet Explorer 8+, Firefox 3.5+, Safari 4+, and Chrome) can make AJAX requests to other domains so long as the target server allows it. This security handshake takes place in the form of HTTP headers. When the client (browser) makes cross-origin requests, it includes the HTTP header - Origin - which announces the requesting domain to the target server. If the server wants to allow the cross-origin request, it has to echo back the Origin in the HTTP response heder - Access-Control-Allow-Origin.
+    > Now, modern browsers (Internet Explorer 8+, Firefox 3.5+, Safari 4+, and Chrome) can make AJAX requests to other domains so long as the target server allows it. This security handshake takes place in the form of HTTP headers. When the client (browser) makes cross-origin requests, it includes the HTTP header - Origin - which announces the requesting domain to the target server. If the server wants to allow the cross-origin request, it has to echo back the Origin in the HTTP response header - Access-Control-Allow-Origin.
 
-    > NOTE: The server can also echo back "*" as the Access-Control-Allow-Origin value if it wants to be more open-ended with its security policy.
+    Note: The server can also send back * as the Access-Control-Allow-Origin value if it wants to be more flexible and allow any client domain access.
 
     So how do we fix this? How do we allow CORS from our Rails server?
+
+    So we need to add some code to our ApplicationController to support CORS.
+
+    In our application_controller.rb file, type:
+
+    ```rubyonrails
+    before_filter :add_allow_credentials_headers
+
+    def add_allow_credentials_headers
+      response.headers['Access-Control-Allow-Origin'] = request.headers['Origin'] || '*'
+      response.headers['Access-Control-Allow-Credentials'] = 'true'
+    end
+    ```
+
+    Now when a server makes a request to the API endpoint, the before_filter will fire before any controller action is fired.
+    Read about the before_filter (which I believe is now the same thing as before_action) here:  
+    [before_filter](http://guides.rubyonrails.org/action_controller_overview.html#filters)
+
+    **Access-Control-Allow-Origin** is required. This header must be included in all valid CORS responses; omitting the header will cause the CORS request to fail. The value of the header can either echo the Origin request header (as in the example above), or be a '*' to allow requests from any origin. If you’d like any site to be able to access your data, using '*' is fine. But if you’d like finer control over who can access your data, use an actual value in the header.
+
+    [CORS and Rails](http://leopard.in.ua/2012/07/08/using-cors-with-rails/)
+
+
+7. And you're good. You have an exposed suya API.
