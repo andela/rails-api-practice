@@ -11,7 +11,6 @@ Again, the order of this tutorial is:
 3. creating-api
 4. testing-api
 
-
 #### Let's Begin
 
 In your test/controllers/api/v1 folder, open up the vendors_controller_test.rb.  
@@ -156,7 +155,7 @@ The response variable will be set following our request (:get, :post, :show, etc
     [2] pry(#<Api::V1::SuyasController>)>
     ```
 
-7. Finish the tests and code for the other controller actions and for the vendor_controller.rb. Good luck! Be sure to use assert_difference to test the create and destroy actions!
+7. Finish the tests and code for the remaining suya controller actions and for the vendor_controller.rb. Good luck! Be sure to use assert_difference to test the create and destroy actions!
 
 8. For more info, perhaps follow this tutorial which also prefers the usage of render over the respond_to/respond_with pattern.
 
