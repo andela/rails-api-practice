@@ -6,15 +6,17 @@ New JavaScript frameworks emerge constantly, completely changing the way we thin
 
 #### Instructions
 
-If you're starting from here, clone this repo down.
+The branches order of this tutorial:
 
-Remember, the order of branches I recommend doing this tutorial is:  
+1. setting-up-rails-api
+2. unit-testing-models-and-bottles.
+3. creating-api
+4. testing-api
+5. serialize-dat-suya
 
-1. setting-up-rails-api  
-2. unit-testing-models-and-bottles  
-3. creating-api  
+If you are unfamiliar with Rails, start at the beginning. If you are somewhat familiar with Rails, switch to that branch on Github, clone it, and start there.
 
-**But if you start at this branch to learn how to create an api, first clone this branch.**
+**If you start at this branch to learn how to create an api, first clone this branch.**
 
 #### Let's begin.
 
