@@ -1,9 +1,13 @@
+## ActiveModel Serializers. Let's fixup our API.
 
+We will be using the active-model serializer gem to customize our API structure.
 
-
+This is the gem:  
 [Active Model Serializer Gem](https://github.com/rails-api/active_model_serializers)
 
+This is a useful resource:  
 [Blog Post on Active Model Serializer](https://blog.engineyard.com/2015/active-model-serializers)  
+
 Quote from the above link:
 > These days, there are so many different choices when it comes to serving data from an API. You can build it in Node with ExpressJS, in Go with Martini, Clojure with Compojure, and many more. But in many cases, you just want to bring something to market as fast as you can. For those times, I still reach for Ruby on Rails.
 
@@ -15,7 +19,7 @@ On the active-model-serializers:
 
 #### Let's Begin
 
-So currently our API response is mad ugly (I believe this is the technical term).  
+So, currently our API response is mad ugly (I believe this is the technical term?).  
 http://mediadb.kicker.de/2015/fussball/spieler/xl/39686_14_2014812112123295.jpg
 
 It would be nice if we could remove the timestamps and IDs in our API response.  
