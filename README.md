@@ -8,9 +8,11 @@ The order of this tutorial:
 
 1. setting-up-rails-api
 2. unit-testing-models-and-bottles.
+3. creating-api
+4. testing-api
+5. serialize-dat-suya
 
-If you are unfamiliar with Rails, start at the beginning. If you are somewhat familiar with Rails, switch to the branch creating-an-api on Github  
-and start there  
+If you are unfamiliar with Rails, start at the beginning. If you are somewhat familiar with Rails, switch to the branch creating-api on Github and start there.
 
 Simply switch to a branch and follow the README.
 
