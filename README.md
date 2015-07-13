@@ -1,7 +1,7 @@
 ## Building and exposing an api built in Ruby on Rails
 
 #### Introduction and topics
-This tutorial will build an API that exposes data pertaining to vendors and suya.
+This tutorial will build an API that exposes data pertaining to vendors and suya. You heard me... I will teach you Rails using suya.
 
 In this tutorial/walkthrough, we will cover the following topics:
 * Setting up a rails api application
@@ -25,15 +25,17 @@ The order of this tutorial:
 
 1. setting-up-rails-api
 2. unit-testing-models-and-bottles.
+3. creating-api
+4. testing-api
+5. serialize-dat-suya
 
-If you are unfamiliar with Rails, start at the beginning. If you are somewhat familiar with Rails, switch to the branch creating-an-api on Github
-and start there
+If you are unfamiliar with Rails, start at the beginning. If you are somewhat familiar with Rails, switch to the branch creating-api on Github and start there.
 
 Simply switch to a branch and follow the README
 
 #### Let's Begin.
 
-1. Install the Rails-api gem on your machine.
+1. Install the Rails-api gem on your machine by typing this in terminal.
     ```Bash
     gem install rails-api
     ```
@@ -54,8 +56,7 @@ Simply switch to a branch and follow the README
     [Active Record Basics](http://guides.rubyonrails.org/active_record_basics.html)
     [Hartl Tutorial chapter on models and AR](https://www.railstutorial.org/book/modeling_users)
 
-    I recommend reading both before continuing. If you need to read the Hartl Tutorial's earlier chapters to gain an understanding
-    of Ruby or Rails concepts, please feel free to do so. Ruby/Rails takes time so do not mind if this is a long process.
+    I recommend reading both before continuing. If you need to read the Hartl Tutorial's earlier chapters to gain an understanding of Ruby or Rails concepts, please feel free to do so. Ruby/Rails takes time so do not mind if this is a long process.
 
     If you want to move on, here are some important quotes.
 
