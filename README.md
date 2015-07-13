@@ -2,7 +2,7 @@
 
 #### Instructions
 
-If you are starting at this point in the tutorial, clone down the repo and follow the instructions in the **Let's Begin** section
+If you are starting at this point in the tutorial, clone down the repo, run rake db:seed in terminal, and follow the instructions in the **Let's Begin** section.
 
 Again, the order of this tutorial is:
 
@@ -96,7 +96,7 @@ The response variable will be set following our request (:get, :post, :show, etc
 
     Note the usage of assert_difference here which verifies that the result of evaluating its first argument (a String which can be passed to be evaluated which is "Suya.count") changes by a certain amount (in this case, 1) after calling the block it was passed.
 
-
+    Also note that the "format: :json" of the params hash is unnecessary since our controller action only responds to one kind of request right now.
 
 5. To get this test to pass, I wrote this in the controller:
 
@@ -108,4 +108,56 @@ The response variable will be set following our request (:get, :post, :show, etc
 
     [render](http://apidock.com/rails/ActionController/Base/render)
 
-    
+6. Let's try this now for the show action for suyas.
+
+    This is my test:
+
+    ```rubyonrails
+    test "can show a suya" do
+      suya = Suya.create(meat: "kidneys", spicy: true)
+      get :show, { id: suya.id }
+
+      suya = JSON.parse(response.body)
+
+      assert_equal 1, Suya.count
+      assert_equal "kidneys", suya["meat"]
+      assert_equal true, suya["spicy"]
+    end
+    ```
+
+    I wrote my controller code as this with a pry:
+
+    ```rubyonrails
+    7: def show
+ =>  8:   require 'pry' ; binding.pry
+     9:   render json: Suya.find(params[:id])
+    10: end
+    ```
+
+    in the stopped pry session, if I type "params" and hit enter, I will see:
+
+    ```rubyonrails
+    [1] pry(#<Api::V1::SuyasController>)> params
+    => {"id"=>"1", "controller"=>"api/v1/suyas", "action"=>"show"}
+    ```
+
+    that's the params format that the get :show action will send to the controller's show action.
+
+    Note that in my test, if I change the parameters hash of the get request to this:
+
+    ```rubyonrails
+    get :show, { id: suya.id, format: :json }
+    ```
+
+    Then the params hash in the controller will look like:
+
+    ```Bash
+    => {"id"=>"1", "format"=>"json", "controller"=>"api/v1/suyas", "action"=>"show"}
+    [2] pry(#<Api::V1::SuyasController>)>
+    ```
+
+7. Finish the tests and code for the other controller actions and for the vendor_controller.rb. Good luck! Be sure to use assert_difference to test the create and destroy actions!
+
+8. For more info, perhaps follow this tutorial which also prefers the usage of render over the respond_to/respond_with pattern.
+
+[API Rails](http://commandercoriander.net/blog/2014/01/04/test-driving-a-json-api-in-rails/)
