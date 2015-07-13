@@ -7,9 +7,12 @@ If you are starting at this point in the tutorial, clone down the repo, run rake
 Again, the order of this tutorial is:
 
 1. setting-up-rails-api
-2. unit-testing-models-and-bottles
+2. unit-testing-models-and-bottles.
 3. creating-api
 4. testing-api
+5. serialize-dat-suya
+
+If you are unfamiliar with Rails, start at the beginning. If you are somewhat familiar with Rails, switch to that branch on Github, clone it, and start there.
 
 #### Let's Begin
 
