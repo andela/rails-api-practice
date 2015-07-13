@@ -74,4 +74,38 @@ A few points I want to first go over about this test:
 
     [more on controller tests](http://api.rubyonrails.org/classes/ActionController/TestCase.html)
 
-3. The response object represents the response of the last HTTP response. In the above example, @response becomes valid after calling "get". If the various assert methods are not sufficient, then you may use this object to inspect the HTTP response in detail.
+3. The response object represents the response of the last HTTP response. In the above example, @response (or "response") becomes valid after calling "get". If the various assert methods are not sufficient, then you may use this object to inspect the HTTP response in detail.
+
+The response variable will be set following our request (:get, :post, :show, etc). We can then parse the body of the response using JSON.parse(response.body) From there, we have access to whatever may come back in the body, such as the names of our vendors or the meat of our suyas.
+
+4. Let's try writing a test for the create action of our controller. Here is the test:
+
+    ```rubyonrails
+    test "create can create a suya" do
+      assert_difference("Suya.count", 1) do
+        create_params = { suya: { meat: "beefy", spicy: true }, format: :json }
+
+        post :create, create_params
+        suya = JSON.parse(response.body)
+
+        assert_equal "beefy", suya["meat"]
+        assert_equal true, suya["spicy"]
+      end
+    end
+    ```
+
+    Note the usage of assert_difference here which verifies that the result of evaluating its first argument (a String which can be passed to be evaluated which is "Suya.count") changes by a certain amount (in this case, 1) after calling the block it was passed.
+
+
+
+5. To get this test to pass, I wrote this in the controller:
+
+    ```rubyonrails
+    def create
+      render json: Suya.create(suyas_params)
+    end
+    ```
+
+    [render](http://apidock.com/rails/ActionController/Base/render)
+
+    
