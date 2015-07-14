@@ -1,5 +1,18 @@
 ## ActiveModel Serializers. Let's fixup our API.
 
+#### Instructions:
+Once again, the order of this tutorial is:
+
+1. setting-up-rails-api
+2. unit-testing-models-and-bottles
+3. creating-api
+4. testing-api
+5. serialize-dat-suya
+
+This is the last section of this tutorial.
+
+#### Intro:
+
 We will be using the active-model serializer gem to customize our API structure.
 
 This is the gem:  
@@ -30,13 +43,144 @@ This is where AMS comes in.
     In our Gemfile, type:
 
     ```rubyonrails
-    gem "active_model_serializers", github: "rails-api/active_model_serializers"
+    gem 'active_model_serializers'
     ```
-
-
 
 2. In terminal, type:
 
     ```Bash
-    rails g serializer message.
+    rails g serializer vendor
     ```
+
+    That should create a app/serializers/vendor_serializer.rb file. In it, type:
+
+    ```rubyonrails
+    class VendorSerializer < ActiveModel::Serializer
+      attributes :id, :name
+    end
+    ```
+
+    In our vendors_controller, in the index action, type:
+
+    ```rubyonrails
+    def index
+      render json: Vendor.all, each_serializer: VendorSerializer
+    end
+    ```
+
+    In our show action, type:
+
+    ```rubyonrails
+    render json: Vendor.find(params[:id]), serialiezr: VendorSerializer
+    ```
+
+    However, see this issue:  
+    [Incompatibility between AMS ~> 0.9.0 and rails-api gem](https://github.com/rails-api/active_model_serializers/issues/600)
+
+    In order to fix this error with the AMS gem of ~> 0.9.0, we need to include this in our ApplicationController:
+
+    ```rubyonrails
+    class ApplicationController < ActionController::API
+      include ActionController::Serialization
+    end
+    ```
+
+    Now when we visit /vendors or /vendors/1, we get a slightly cleaner API output without the created_at or updated_at.
+
+3. We can also do other cool things with AMS.
+
+    Imagine we obtained this suya and vendor data from the national association of suya vendors (abbreviated as NASV from here on out). Say the NASV has a public API interface where you can obtain all the data related to vendors and their respective suyas. Say this information was incomplete. Say our seed data file is a replica of that real data and that's how sparse the NASV's API is. So we see an opportunity. We want to create an API with even more data and we may want to perform some calculations on the original API data. So let's add some fields.
+
+    Let's say we want to give each vendor a score based on how many suyas they own.
+
+    First, let's add this score method to our vendor model:
+
+    ```rubyonrails
+    def suyas_count
+      suyas.count
+    end
+    ```
+
+    And in our vendors_serializer:
+
+    ```rubyonrails
+    attributes :id, :name, :score
+
+    def score
+      object.suyas_count
+    end
+    ```
+
+    The above could have been "simplified" by simply typing this in the vendors_serializer:
+
+    ```rubyonrails
+    attributes :id, :name, :score
+
+    def score
+      object.suyas.count
+    end
+    ```
+
+    But I wanted to show the connection between the model and the serializer, and the object method that is available inside the serializer.
+
+4. Right now, our API response looks like this after these changes:
+
+    > {  
+        "vendors": [  
+          {  
+          "id": 1,  
+          "name": "Jeffe",  
+          "score": 2  
+          },  
+          {  
+          "id": 2,  
+          "name": "Jeffe1",  
+          "score": 2  
+          },  
+          {  
+          "id": 3,  
+          "name": "Jeffe2",  
+          "score": 1  
+          },  
+          {  
+          "id": 4,  
+          "name": "Jeffe3",  
+          "score": 0  
+          },  
+      ...  
+
+    Say we wanted to include another tag at the top level with say with the average suyas owned per vendor. We can do that with AMS.
+
+    In the index action of the vendors_controller.rb:
+
+    ```rubyonrails
+    def index
+      render json: Vendor.all, each_serializer: VendorSerializer,
+        meta: Vendor.average_suya_per_vendor,
+        meta_key: "average_suya"
+    end
+    ```
+
+    In our vendor_model:
+
+    ```rubyonrails
+    def self.average_suya_per_vendor
+      total = 0
+      total_vendors = all.count
+      all.each do |vendor|
+        total += vendor.suyas.count
+      end
+      total/total_vendors.to_f
+    end
+
+    ```
+
+    Lastly, our Gemfile needs to change to use a different compatible version of AMS with rails-api so that you can add root nodes like meta.
+
+    ```rubyonrails
+    gem 'active_model_serializers', '~> 0.8.0'
+    ```
+
+    And now when you visit /vendors, you should see the extra root node which contains your own calculated data.
+
+5. Hope that was clear! If you have any questions, feel free to reach out to Jeffrey Wan on Github.
