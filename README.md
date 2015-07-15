@@ -21,15 +21,15 @@ By the end of this long multi-part tutorial, you will have a basic understanding
 #### Instructions
 If you're starting at the setting-up-rails-api branch, DO NOT CLONE THIS BRANCH. Just follow the instructions below. If you already know the basics of Rails, you can switch to another more advanced branch, clone the branch, and follow the README.
 
-The order of this tutorial:
+The order of this tutorial is this:
 
-1. setting-up-rails-api
-2. unit-testing-models-and-bottles.
-3. creating-api
-4. testing-api
-5. serialize-dat-suya
+1. 1-setting-up-rails-api
+2. 2-unit-testing-models-and-bottles.
+3. 3-creating-an-api
+4. 4-testing-api
+5. 5-serialize-dat-suya
 
-If you are unfamiliar with Rails, start at the beginning. If you are somewhat familiar with Rails, switch to the branch creating-api on Github and start there.
+If you are unfamiliar with Rails, start at the beginning of this tutorial by switching to the 1-setting-up-rails-api branch on Github and following the directions. If you are somewhat familiar with Rails, switch to the branch creating-api on Github and start there.
 
 Simply switch to a branch and follow the README
 
