@@ -133,10 +133,10 @@ Simply switch to a branch and follow the README
 6. Let's do the same thing with the Suya Model. Let's first generate the model:
 
     ```Bash
-    rails g model Suya type:string spicy:boolean
+    rails g model Suya meat:string spicy:boolean
     ```
 
-    In this model, we are creating a Suya model, and a Suyas table where there is a type column with a string data-type. We're also creating a spicy column with a data-type of boolean.
+    In this model, we are creating a Suya model, and a Suyas table where there is a "meat" column with a string data-type. We're also creating a spicy column with a data-type of boolean.
 
     Let's try to migrate and see what happens:
 
@@ -144,14 +144,12 @@ Simply switch to a branch and follow the README
     rake db:migrate
     ```
 
-    Unfortunately, that column named "type" will cause us problems later on since "type" is a reserved word in migrations. We will fix that later with another Rails generator.
-
     Right now, our schema.rb should look like this:
 
     > ActiveRecord::Schema.define(version: 20150710101513) do
 
     > create_table "suyas", force: :cascade do |t|
-        t.string   "type"
+        t.string   "meat"
         t.boolean  "spicy"
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
@@ -165,14 +163,12 @@ Simply switch to a branch and follow the README
 
     > end
 
-
-
-7. So we created some models without TDD. Let's try from here on out to abide by TDD standards. We will cover testing in the branch called testing-models-and-bottles.
+7. So we created some models without TDD since we created the models first before writing tests. Let's try from here on out to abide by TDD standards. We will cover testing in the branch called testing-models-and-bottles.
 
 #### Recap
 * We created a rails api app with the rails-api gem and the rails-api command.
 * We explored models, migrations, and the schema (the representation of the database).
-* We used the generator command for models which was
+* We used the generator command for models which was:
 
 ```Bash
 rails g model ModelName column_name:data_type
@@ -184,6 +180,6 @@ By the way, if you left out the data_type in the generator command, it defaults 
 rails g model Vendor name email
 ```
 
-creates a table called "vendors" with columns called name and email whose data types are strings.
+creates a table called "vendors" with columns called "name" and "email" whose data types are strings.
 
 [Model Generators](http://railsguides.net/advanced-rails-model-generators/)
